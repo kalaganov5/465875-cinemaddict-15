@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Володя Калаганов](https://up.htmlacademy.ru/ecmascript/15/user/465875).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/joker).
 
 ---
 
