@@ -5,6 +5,12 @@ import {createFilmsTopRatedTemplate, createFilmsMostCommented} from './view/film
 import {createFilmStatisticTemplate, createFilmStatisticSummaryTemplate} from './view/statistics.js';
 import {createFilmDetailsTemplate} from './view/film-datails.js';
 
+// temp
+import './mock/generate-comments.js';
+
+
+const FILM_COUNT = 5;
+const FILM_PRIORITY_COUNT = 2;
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statistics = document.querySelector('.footer__statistics');
@@ -28,11 +34,11 @@ renderElement(main, createFilmStatisticTemplate(), 'beforeend');
 
 renderElement(main, createFilterTemplate(), 'beforeend');
 renderElement(header, createProfileTemplate(), 'beforeend');
-renderElement(main, createFilmListTemplate(5), 'beforeend');
+renderElement(main, createFilmListTemplate(FILM_COUNT), 'beforeend');
 
 const films = document.querySelector('.films');
-renderElement(films, createFilmsTopRatedTemplate(2), 'beforeend');
-renderElement(films, createFilmsMostCommented(2), 'beforeend');
+renderElement(films, createFilmsTopRatedTemplate(FILM_PRIORITY_COUNT), 'beforeend');
+renderElement(films, createFilmsMostCommented(FILM_PRIORITY_COUNT), 'beforeend');
 renderElement(statistics, createFilmStatisticSummaryTemplate(), 'beforeend');
 
 // Поп-ап с описанием фильма
