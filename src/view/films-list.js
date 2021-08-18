@@ -1,8 +1,9 @@
 import {createFilmCardsTemplate} from './create-film-card.js';
-import {createShowMoreTemplate} from './show-more.js';
+import {COUNT_FILM_FOR_LOAD_MORE_BUTTON, createShowMoreButtonTemplate} from './load-more-film/create-show-more-button.js';
+
 /**
  *
- * @param {Number} count - Число карточек фильмов
+ * @param {Array} count - Число карточек фильмов
  * @returns - возвращает шаблон разметки в контейнере films с карточками фильмов
  */
 const createFilmListTemplate = (count) => (
@@ -13,7 +14,7 @@ const createFilmListTemplate = (count) => (
       <div class="films-list__container">
         ${createFilmCardsTemplate(count)}
       </div>
-      ${createShowMoreTemplate()}
+      ${count.length > COUNT_FILM_FOR_LOAD_MORE_BUTTON ? createShowMoreButtonTemplate(): ''}
     </section>
   </section>`
 );

@@ -1,10 +1,13 @@
-const createFilmStatisticTemplate = () => (
+import { setUserRank } from './user-rating/set-user-rank';
+
+// Туда нада заранее продумать фильтрацию и уже релизовывать подстановку данные статистики
+const createFilmStatisticTemplate = (films) => (
   `
   <section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Movie buff</span>
+      <span class="statistic__rank-label">${setUserRank(films)}</span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -45,17 +48,16 @@ const createFilmStatisticTemplate = () => (
       <canvas class="statistic__chart" width="1000"></canvas>
     </div>
 
-  </section>
-  `
+  </section>`
 );
 
 /**
- *
+ * @films - массив с фильмами
  * @returns - возвращает шаблон разметки в контейнере footer__statistics статистику фильмов
  */
 
-const createFilmStatisticSummaryTemplate = () => (
-  '<p>130 291 movies inside</p>'
+const createFilmStatisticSummaryTemplate = (films) => (
+  `<p>${films.length} movies inside</p>`
 );
 
 export {createFilmStatisticTemplate, createFilmStatisticSummaryTemplate};

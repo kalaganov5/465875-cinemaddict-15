@@ -33,4 +33,39 @@ const getRandomUniqueNumber = (array, maxNumber = 9999) => {
   return randomInteger;
 };
 
-export {getRandomInteger, getRandomUniqueNumber};
+/**
+ *
+ * @param {array} array - массив с данными
+ * @return Возвращает случайный элемент из массива
+ */
+const getRandomElement = (array) => {
+  // Если элементов в массиве один
+  if (array.length === 1) {
+    return array[0];
+  }
+  const randomIndex = getRandomInteger(0, array.length - 1);
+  return array[randomIndex];
+};
+
+/**
+ *
+ * @param {array} array - массив с данными
+ * @return Возвращает случайный элементы из массива
+ */
+const getRandomElements = (array) => {
+  const newArray = Array.from(array);
+  const countRandomElements =
+    (newArray.length === 1) ?
+      1 : getRandomInteger(1, newArray.length);
+  const elements = [];
+  for (let i = 0; i < countRandomElements; i++) {
+    const randomElement = getRandomElement(newArray);
+    // Добавляем этот элемент в наш массив
+    elements.push(randomElement);
+    // Удаляем элемент из прошлого массива
+    newArray.splice(newArray.indexOf(randomElement), 1);
+  }
+  return elements;
+};
+
+export {getRandomInteger, getRandomUniqueNumber, getRandomElement, getRandomElements};
