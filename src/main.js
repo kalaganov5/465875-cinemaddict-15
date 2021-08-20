@@ -14,14 +14,12 @@ import {countedStatistics, statistics} from './view/statistic/count-statistics.j
 
 // const FILM_COUNT = 5;
 // const FILM_PRIORITY_COUNT = 2;
-const FILMS_COUNT = 10;
+const FILMS_COUNT = 17;
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statisticsElement = document.querySelector('.footer__statistics');
 const body = document.querySelector('body');
 const films = generateFilms(FILMS_COUNT);
-
-console.log(films)
 
 let showMoreButton = null;
 
@@ -36,7 +34,7 @@ renderElement(main, createFilterTemplate(), 'beforeend');
 
 // Установить рейтинг пользователя
 renderElement(header, createProfileTemplate(
-  setUserRank(statisticsElement.watched),
+  setUserRank(statistics.watched),
 ), 'beforeend');
 
 renderElement(main, createFilmListTemplate(films), 'beforeend');
