@@ -1,4 +1,5 @@
 import {getRandomElement, getRandomElements, getRandomInteger, getRandomUniqueNumber} from './utils.js';
+import {convertTime} from '../view/utils.js';
 import {commentsId} from './generate-comments.js';
 import dayjs from 'dayjs';
 
@@ -101,18 +102,6 @@ const getUniqueComment = (arrayId) => {
   return ids;
 };
 
-/**
- *
- * @param {number} durationMinutes минуты
- * @returns конвертирует минуты в формат "ЧАСЫ МИНУТЫ"
- */
-const convertTime = (durationMinutes) => {
-  const hours = Math.trunc(durationMinutes / 60);
-  const minutes = durationMinutes % 60;
-
-  return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m` : ''}`;
-};
-
 const filmsId = [];
 
 /**
@@ -134,7 +123,7 @@ const generateFilm = () => ({
   rating: `${getRandomInteger(0, 9)}.${getRandomInteger(1, 9)}`,
   ageRating: getRandomElement(AGE_RATING),
   releaseDate: generateReleseDate(),
-  duration: convertTime(getRandomInteger(59, 61)),
+  duration: convertTime(getRandomInteger(30, 100)),
   genre: getRandomElements(GENRE),
   isFavorite: Boolean(getRandomInteger(0, 1) === 1),
   isWatched: Boolean(getRandomInteger(0, 1) === 1),
@@ -158,4 +147,4 @@ const generateFilms = (count) => (
   new Array(count).fill(null).map(generateFilm)
 );
 
-export {generateFilm, generateFilms};
+export {generateFilm, generateFilms, filmsId};

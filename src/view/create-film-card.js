@@ -1,14 +1,25 @@
-import {cropText, getDeclension} from './utils.js';
+import {cropText, getDeclension, removeElement} from './utils.js';
+import {showMoreButton} from '../main.js';
+
+let howManyCallCreateFilmCardsTemplate = 0;
 
 /**
  * @filmArray - массив с фильмами
- * @renderedFilms
  * @returns Генерирует необходимое количество карточек фильмов
  */
-const createFilmCardsTemplate = (filmArray, renderedFilms) => {
+const createFilmCardsTemplate = (filmArray) => {
+  howManyCallCreateFilmCardsTemplate++;
+  const FILM_STEP = 5;
+  const startIndex = (FILM_STEP * howManyCallCreateFilmCardsTemplate) - FILM_STEP;
+  const endIndex = startIndex + FILM_STEP;
   let filmCards = '';
-  for (let i = 0; i < filmArray.length; i++) {
-
+  for (let i = startIndex; i < endIndex; i++) {
+    // Если в массиве закончились данные
+    if (filmArray[i] === undefined) {
+      // Если кнопки уже не существует
+      showMoreButton !== null && showMoreButton !== undefined ? removeElement(showMoreButton): '';
+      break;
+    }
     const {
       _id,
       title,
@@ -23,6 +34,7 @@ const createFilmCardsTemplate = (filmArray, renderedFilms) => {
       isWatched,
       isFavorite,
     } =  filmArray[i];
+
 
     // Зашиваю id фильма для того чтобы в будущем попробовать реализовать
     // генерацию и рендер ПОПАП фильма по отслеживанию нажатия ID

@@ -1,16 +1,12 @@
-import {showMoreButton} from '../../main.js';
+import {filmContainer} from '../../main.js';
+import { renderElement } from '../utils.js';
+import { films } from '../../main.js';
+import { createFilmCardsTemplate } from '../create-film-card.js';
 
-// console.log(showMoreButton.textContent)
+const showMoreHandler = (evt) => {
+  evt.preventDefault();
+  const markup = createFilmCardsTemplate(films);
+  renderElement(filmContainer, markup);
+};
 
-// const showMoreHandler = (evt) => {
-//   evt.preventDefault();
-//   console.log('click load more')
-// };
-
-// console.log(showMoreButton);
-
-// showMoreButton.addEventListener ('click', (evt) => {
-//   debugger
-//   evt.preventDefault();
-//   console.log('click load more')
-// });
+export {showMoreHandler};

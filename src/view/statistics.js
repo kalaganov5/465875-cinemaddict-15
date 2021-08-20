@@ -1,13 +1,16 @@
 import { setUserRank } from './user-rating/set-user-rank';
+import {statistics} from './statistic/count-statistics.js';
 
-// Туда нада заранее продумать фильтрацию и уже релизовывать подстановку данные статистики
-const createFilmStatisticTemplate = (films) => (
+// нада продумать фильтрацию
+const createFilmStatisticTemplate = () => (
   `
   <section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">${setUserRank(films)}</span>
+      <span class="statistic__rank-label">
+        ${setUserRank(statistics.watched) !== null ? setUserRank(statistics.watched) : 'Zero, still ahead :)'}
+      </span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -32,15 +35,15 @@ const createFilmStatisticTemplate = (films) => (
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${statistics.watched} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${statistics.totalDuration.hour} <span class="statistic__item-description">h</span> ${statistics.totalDuration.minutes} <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${statistics.genre}</p>
       </li>
     </ul>
 

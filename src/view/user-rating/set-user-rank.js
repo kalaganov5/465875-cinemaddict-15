@@ -6,16 +6,9 @@
 */
 
 /**
- *
+ * Установит ранк в зависимости от просмотренных фильмов
  */
-const setUserRank = (filmsInfo) => {
-  let countWatched = 0;
-  filmsInfo.forEach((film) => {
-    const {isWatched} = film;
-    if (isWatched) {
-      countWatched++;
-    }
-  });
+const setUserRank = (countWatched) => {
   if (countWatched > 0 && countWatched <= 10) {
     // от 1 до 10 — novice;
     return 'Novice';
