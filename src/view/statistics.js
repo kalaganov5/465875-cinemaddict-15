@@ -1,10 +1,16 @@
+import { setUserRank } from './user-rating/set-user-rank';
+import {statistics} from './statistic/count-statistics.js';
+
+// нада продумать фильтрацию
 const createFilmStatisticTemplate = () => (
   `
   <section class="statistic">
     <p class="statistic__rank">
       Your rank
       <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-      <span class="statistic__rank-label">Movie buff</span>
+      <span class="statistic__rank-label">
+        ${setUserRank(statistics.watched) !== null ? setUserRank(statistics.watched) : 'Zero, still ahead :)'}
+      </span>
     </p>
 
     <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -29,15 +35,15 @@ const createFilmStatisticTemplate = () => (
     <ul class="statistic__text-list">
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">You watched</h4>
-        <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+        <p class="statistic__item-text">${statistics.watched} <span class="statistic__item-description">movies</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+        <p class="statistic__item-text">${statistics.totalDuration.hour} <span class="statistic__item-description">h</span> ${statistics.totalDuration.minutes} <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Top genre</h4>
-        <p class="statistic__item-text">Sci-Fi</p>
+        <p class="statistic__item-text">${statistics.genre}</p>
       </li>
     </ul>
 
@@ -45,17 +51,16 @@ const createFilmStatisticTemplate = () => (
       <canvas class="statistic__chart" width="1000"></canvas>
     </div>
 
-  </section>
-  `
+  </section>`
 );
 
 /**
- *
+ * @films - массив с фильмами
  * @returns - возвращает шаблон разметки в контейнере footer__statistics статистику фильмов
  */
 
-const createFilmStatisticSummaryTemplate = () => (
-  '<p>130 291 movies inside</p>'
+const createFilmStatisticSummaryTemplate = (films) => (
+  `<p>${films.length} movies inside</p>`
 );
 
 export {createFilmStatisticTemplate, createFilmStatisticSummaryTemplate};

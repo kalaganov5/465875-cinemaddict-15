@@ -1,41 +1,60 @@
 import {createMenuTemplate, createFilterTemplate} from './view/menu.js';
-import {createProfileTemplate} from './view/user-rank.js';
+import {createProfileTemplate} from './view/user-rating/create-user-rank.js';
 import {createFilmListTemplate} from './view/films-list.js';
-import {createFilmsTopRatedTemplate, createFilmsMostCommented} from './view/film-card-extra';
+// import {createFilmsTopRatedTemplate, createFilmsMostCommented} from './view/film-card-extra';
 import {createFilmStatisticTemplate, createFilmStatisticSummaryTemplate} from './view/statistics.js';
-import {createFilmDetailsTemplate} from './view/film-datails.js';
+import {renderFilmDetails} from './view/film-datails.js';
+import {generateFilms} from './mock/generate-films.js';
+import {renderElement} from './view/utils.js';
+import {comments} from './mock/generate-comments.js';
+import {setUserRank} from './view/user-rating/set-user-rank.js';
+import {COUNT_FILM_FOR_LOAD_MORE_BUTTON} from './view/load-more-film/create-show-more-button.js';
+import { showMoreHandler } from './view/load-more-film/show-more-handler.js';
+import {countedStatistics, statistics} from './view/statistic/count-statistics.js';
 
+// const FILM_COUNT = 5;
+// const FILM_PRIORITY_COUNT = 2;
+const FILMS_COUNT = 17;
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
-const statistics = document.querySelector('.footer__statistics');
+const statisticsElement = document.querySelector('.footer__statistics');
 const body = document.querySelector('body');
+const films = generateFilms(FILMS_COUNT);
 
+let showMoreButton = null;
 
-/**
- * Функция занимается отрисовкой элемента
- * @param {*} container - контейнер в который вставляем элемент
- * @param {*} layout - готовая разметка
- * @param {*} place - позиция добавляемого элемента относительно container (контейнера), может быть: 'beforebegin', 'afterbegin', 'beforeend', 'afterend'
- */
-const renderElement = (container, layout, place) => {
-  container.insertAdjacentHTML(place, layout);
-};
+countedStatistics();
 
-renderElement(main, createMenuTemplate(), 'beforeend');
+renderElement(main, createMenuTemplate(films), 'beforeend');
 
 // Страница статистики
-renderElement(main, createFilmStatisticTemplate(), 'beforeend');
+renderElement(main, createFilmStatisticTemplate(films), 'beforeend');
 
 renderElement(main, createFilterTemplate(), 'beforeend');
-renderElement(header, createProfileTemplate(), 'beforeend');
-renderElement(main, createFilmListTemplate(5), 'beforeend');
 
-const films = document.querySelector('.films');
-renderElement(films, createFilmsTopRatedTemplate(2), 'beforeend');
-renderElement(films, createFilmsMostCommented(2), 'beforeend');
-renderElement(statistics, createFilmStatisticSummaryTemplate(), 'beforeend');
+// Установить рейтинг пользователя
+renderElement(header, createProfileTemplate(
+  setUserRank(statistics.watched),
+), 'beforeend');
+
+renderElement(main, createFilmListTemplate(films), 'beforeend');
+// renderElement(main, createFilmListTemplate(films, 5), 'beforeend');
+
+const filmList = document.querySelector('.films');
+const filmContainer = filmList.querySelector('.films-list__container');
+
+if (films.length > COUNT_FILM_FOR_LOAD_MORE_BUTTON) {
+  showMoreButton = document.querySelector('.films-list__show-more');
+  showMoreButton.addEventListener ('click', showMoreHandler);
+}
+
+// renderElement(filmList, createFilmsTopRatedTemplate(FILM_PRIORITY_COUNT), 'beforeend');
+// renderElement(filmList, createFilmsMostCommented(FILM_PRIORITY_COUNT), 'beforeend');
+renderElement(statisticsElement, createFilmStatisticSummaryTemplate(films), 'beforeend');
 
 // Поп-ап с описанием фильма
-renderElement(body, createFilmDetailsTemplate(), 'beforeend');
+// renderElement(body, renderFilmDetails(films[0], comments), 'beforeend');
 
-export {body};
+// console.log(countedStatistics)
+
+export {body, films, showMoreButton, filmContainer};
