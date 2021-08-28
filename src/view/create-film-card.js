@@ -1,15 +1,14 @@
 import {cropText, getDeclension, removeElement} from './utils.js';
-import {showMoreButton} from '../main.js';
 
 let howManyCallCreateFilmCardsTemplate = 0;
+const FILM_STEP = 5;
 
 /**
  * @filmArray - массив с фильмами
  * @returns Генерирует необходимое количество карточек фильмов
  */
-const createFilmCardsTemplate = (filmArray) => {
+const createFilmCardsTemplate = (filmArray, showMoreButton = null) => {
   howManyCallCreateFilmCardsTemplate++;
-  const FILM_STEP = 5;
   const startIndex = (FILM_STEP * howManyCallCreateFilmCardsTemplate) - FILM_STEP;
   const endIndex = startIndex + FILM_STEP;
   let filmCards = '';
@@ -63,4 +62,4 @@ const createFilmCardsTemplate = (filmArray) => {
   return filmCards;
 };
 
-export {createFilmCardsTemplate};
+export {createFilmCardsTemplate, FILM_STEP};

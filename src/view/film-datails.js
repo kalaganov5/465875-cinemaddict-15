@@ -1,5 +1,5 @@
 import {body} from '../main.js';
-import {getDeclension} from './utils.js';
+import {getDeclension, createElement, removeElement} from './utils.js';
 import {renderComments} from './render-comments.js';
 
 /**
@@ -9,13 +9,13 @@ import {renderComments} from './render-comments.js';
  */
 const generateGenre = (genres) => {
   let genreElements = '';
-  for (let i = 0; i < genres.length; i++) {
-    genreElements+= `<span class="film-details__genre">${genres[i]}</span>`;
-  }
+  genres.forEach((element)=> {
+    genreElements += `<span class="film-details__genre">${element}</span>`;
+  });
   return genreElements;
 };
 
-const renderFilmDetails = (filmDetails, comments) => {
+const createFilmTemplate = (filmDetails, comments) => {
   const {
     title,
     originalTitle,
@@ -35,10 +35,8 @@ const renderFilmDetails = (filmDetails, comments) => {
     isWatched,
     isFavorite,
   } = filmDetails;
-
   body.classList.add('hide-overflow');
-  return `
-  <section class="film-details">
+  return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
         <div class="film-details__close">
@@ -144,8 +142,41 @@ const renderFilmDetails = (filmDetails, comments) => {
         </section>
       </div>
     </form>
-  </section>
-  `;
+  </section>`;
 };
 
-export {renderFilmDetails};
+class FilmDetails {
+  constructor(filmDetails, comments) {
+    this._element = null;
+    this._filmDetails = filmDetails;
+    this._comments = comments;
+    this._popUp = null;
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._filmDetails, this._comments);
+  }
+
+  setCardHandler() {
+    this._element.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      if(evt.target.classList.contains('film-details__close-btn')) {
+        removeElement(this._element);
+      }
+    });
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    this.setCardHandler();
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
+export default FilmDetails;
