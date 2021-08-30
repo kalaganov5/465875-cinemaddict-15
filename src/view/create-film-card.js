@@ -36,7 +36,7 @@ const createFilmCardsTemplate = (filmArray, showMoreButton = null) => {
 
 
     // Зашиваю id фильма для того чтобы в будущем попробовать реализовать
-    // генерацию и рендер ПОПАП фильма по отслеживанию нажатия ID
+    // генерацию и рендер pop-up фильма по отслеживанию нажатия ID
     filmCards += `
     <article class="film-card" data-film-id="${_id}">
       <h3 class="film-card__title">${title}</h3>

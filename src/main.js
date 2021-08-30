@@ -3,14 +3,14 @@ import SiteMenuView from './view/menu.js';
 import FilmStatisticView from './view/statistics.js';
 import RankView from './view/user-rating/create-user-rank.js';
 import FilmListView from './view/films.js';
-import FilmSummaryStatisticView from './view/statisctic-summary.js';
+import FilmSummaryStatisticView from './view/statistic-summary.js';
 
 import {generateFilms} from './mock/generate-films.js';
 import {renderDOMStrings, RenderPosition} from './view/utils.js';
 import {countedStatistics, statistics} from './view/statistic/count-statistics.js';
 
 
-const FILMS_COUNT = 9;
+const FILMS_COUNT = 1000;
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statisticsElement = document.querySelector('.footer__statistics');
@@ -37,13 +37,13 @@ const filter = new FilterMenuView();
 renderDOMStrings(main, filter.getElement(), RenderPosition.BEFOREEND);
 
 // Страница статистики
-const statisctic = new FilmStatisticView(
+const statistic = new FilmStatisticView(
   statistics.watched,
   statistics.genre,
   statistics.totalDuration.hour,
   statistics.totalDuration.minutes,
 );
-renderDOMStrings(main, statisctic.getElement(), RenderPosition.BEFOREEND);
+renderDOMStrings(main, statistic.getElement(), RenderPosition.BEFOREEND);
 
 // Рендер фильмов
 const film = new FilmListView(films);

@@ -35,7 +35,6 @@ const createFilmTemplate = (filmDetails, comments) => {
     isWatched,
     isFavorite,
   } = filmDetails;
-  body.classList.add('hide-overflow');
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
@@ -162,6 +161,7 @@ class FilmDetails {
       evt.preventDefault();
       if(evt.target.classList.contains('film-details__close-btn')) {
         removeElement(this._element);
+        body.classList.remove('hide-overflow');
       }
     });
   }

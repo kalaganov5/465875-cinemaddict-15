@@ -1,36 +1,52 @@
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
 import {createShowMoreButtonTemplate} from './load-more-film/create-show-more-button.js';
 import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils.js';
-import FilmDetailsView from './film-datails.js';
+import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';
 
-// Найдите обложку фильма,
-// заголовок и элемент с количеством комментариев в компоненте карточки фильма
+/**
+ *
+ * @param {sting} filmId номер фильма строкой
+ * @returns объект фильма который нужно показать пользователю
+ */
+const setCurrentFilm = (filmId) => {
+  for(const item of films) {
+    if(item._id === +filmId) {
+      return item;
+    }
+  }
+};
+
+/**
+ * Обработчик нажатий по карточкам фильма, открывает желаемый фильм в pop-up
+ */
 const filmCardHandler = (evt) => {
   evt.preventDefault();
-  console.log(evt.target.classList)
   if (evt.target.classList.contains('film-card__poster') ||
     evt.target.classList.contains('film-card__title') ||
     evt.target.classList.contains('film-card__comments')) {
-
+    // Находим и ставим текущий id фильма
+    const currentFilmId = evt.target.parentNode.getAttribute('data-film-id');
     // Поп-ап с описанием фильма
-    const filmDetails = new FilmDetailsView(films[0], comments);
+    const currentFilm = setCurrentFilm(currentFilmId);
+    const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
+    body.classList.add('hide-overflow');
   }
 };
 
 /**
  *
- * @param {Array} films Число карточек фильмов
+ * @param {Array} filmsCount Число карточек фильмов
  * @returns возвращает шаблон разметки в контейнере films с карточками фильмов
  */
-const createFilmListTemplate = (films, buttonLoadMore) => (
+const createFilmListTemplate = (filmsCount, buttonLoadMore) => (
   `<section class="films">
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
       <div class="films-list__container">
-        ${films}
+        ${filmsCount}
       </div>
       ${buttonLoadMore}
     </section>
@@ -55,6 +71,7 @@ class FilmList {
     const loadMore = this._films.length > FILM_STEP ?
       createShowMoreButtonTemplate(): '';
     this._element = createFilmListTemplate(cards, loadMore);
+
     return this._element;
   }
 
@@ -86,5 +103,4 @@ class FilmList {
     this._element = null;
   }
 }
-
 export default FilmList;

@@ -8,11 +8,20 @@ const renderElement = (container, layout, place = 'beforeend') => {
   container.insertAdjacentHTML(place, layout);
 };
 
+/**
+ * Функция для более удобной выбора местоположения вставки
+ */
 const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
 
+/**
+ * Функция вставит элементы в разметку
+ * @param {*} container контейнер для вставки dom элементов
+ * @param {string} DOMStrings - строка с готовой разметкой html
+ * @param {string} position - расположение из фукнции RenderPosition
+ */
 const renderDOMStrings = (container, DOMStrings, position = RenderPosition.BEFOREEND) => {
   switch(position) {
     case RenderPosition.AFTERBEGIN:
@@ -133,7 +142,6 @@ const createElement = (template) => {
   wrapper.innerHTML = template.trimLeft();
   if (wrapper.querySelector('.temp-container')) {
     wrapper = wrapper.querySelector('.temp-container').children;
-    console.log(wrapper)
     return wrapper;
   }
   return wrapper.firstChild;
