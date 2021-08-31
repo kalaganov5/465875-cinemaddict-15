@@ -4,6 +4,7 @@ import {createElement, renderDOMStrings, RenderPosition, renderElement} from './
 import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';
+import {statistics} from './statistic/count-statistics.js';
 
 /**
  *
@@ -33,6 +34,17 @@ const filmCardHandler = (evt) => {
     const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
     body.classList.add('hide-overflow');
+  }
+};
+
+const setTitleFilmList = () => {
+  // временно такое решение
+  const activefilters = document.querySelector('.main-navigation__item--active');
+  switch(activefilters.textContent) {
+    case 'All movies': return 'There are no movies in our database';
+    case 'Watchlist': return 'There are no movies to watch now';
+    case 'History': return 'There are no watched movies now';
+    case 'Favorites': return 'There are no favorite movies now';
   }
 };
 
