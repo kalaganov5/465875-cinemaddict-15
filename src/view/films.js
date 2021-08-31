@@ -87,7 +87,7 @@ class FilmList {
   }
 
   setCardHandler() {
-    this._filmContainer.addEventListener('click', filmCardHandler, true);
+    this._filmContainer.addEventListener('click', filmCardHandler);
   }
 
   getElement() {

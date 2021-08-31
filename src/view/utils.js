@@ -20,7 +20,7 @@ const RenderPosition = {
  * Функция вставит элементы в разметку
  * @param {*} container контейнер для вставки dom элементов
  * @param {string} DOMStrings - строка с готовой разметкой html
- * @param {string} position - расположение из фукнции RenderPosition
+ * @param {string} position - расположение из функции RenderPosition
  */
 const renderDOMStrings = (container, DOMStrings, position = RenderPosition.BEFOREEND) => {
   switch(position) {
@@ -95,19 +95,14 @@ const spreadHoursMinutesToMinutes = (duration) => {
 const convertTime = (durationMinutes) => {
   const hours = Math.trunc(durationMinutes / 60);
   const minutes = durationMinutes % 60;
-
-  // return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m` : ''}`;
   return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m` : ''}`;
-  // return {
-  //   hours: hours > 0 ? hours : 0,
-  //   minutes: minutes > 0 ? minutes : 0,
-  // };
+
 };
 
 /**
  *
  * @param {array} array массив в котором считаем количество повторений
- * @returns объект в где ключ это значение из массива и значение объекта это колличество повторений
+ * @returns объект в где ключ это значение из массива и значение объекта это количество повторений
  */
 const countRepeatedItemInArray = (array) => (
   array.reduce((accumulator, element) => {
@@ -146,13 +141,5 @@ const createElement = (template) => {
   }
   return wrapper.firstChild;
 };
-
-// const createElement = (template) => {
-//   var parser = new DOMParser();
-// 	var doc = parser.parseFromString(template, 'text/html');
-//   console.log(doc)
-//   console.log(this)
-// 	return doc.body;
-// };
 
 export {renderDOMStrings, createElement, RenderPosition, renderElement, cropText, getDeclension, removeElement, spreadHoursMinutesToMinutes, convertTime, countRepeatedItemInArray, findMaxInObjectElement};

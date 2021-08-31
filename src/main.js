@@ -4,11 +4,9 @@ import FilmStatisticView from './view/statistics.js';
 import RankView from './view/user-rating/create-user-rank.js';
 import FilmListView from './view/films.js';
 import FilmSummaryStatisticView from './view/statistic-summary.js';
-
 import {generateFilms} from './mock/generate-films.js';
 import {renderDOMStrings, RenderPosition} from './view/utils.js';
 import {countedStatistics, statistics} from './view/statistic/count-statistics.js';
-
 
 const FILMS_COUNT = 1000;
 const header = document.querySelector('.header');

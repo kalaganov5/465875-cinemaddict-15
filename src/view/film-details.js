@@ -157,13 +157,30 @@ class FilmDetails {
   }
 
   setCardHandler() {
+    /**
+     * Закрывает и удалеяет popup из разметки
+     */
+    const closePopUp = () => {
+      removeElement(this._element);
+      body.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', escapeDownHandler);
+    };
+    // handler по крестику
     this._element.addEventListener('click', (evt) => {
       evt.preventDefault();
       if(evt.target.classList.contains('film-details__close-btn')) {
-        removeElement(this._element);
-        body.classList.remove('hide-overflow');
+        closePopUp();
       }
     });
+    // handler по клавише Escape
+    // используем function declaration намеренно
+    // чтобы избежать ошибок linter
+    function escapeDownHandler(evt) {
+      if(evt.key === 'Escape') {
+        closePopUp();
+      }
+    }
+    document.addEventListener('keydown', escapeDownHandler);
   }
 
   getElement() {
