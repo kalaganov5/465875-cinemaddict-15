@@ -16,9 +16,9 @@ const createMenuTemplate = (countWatchlist, countWatched, countFavorites) => (
 );
 
 class SiteMenu extends Abstract{
-  constructor(coutWatchlist, countWatched, countFavorites) {
+  constructor(countWatchlist, countWatched, countFavorites) {
     super();
-    this._countWatchlist = coutWatchlist;
+    this._countWatchlist = countWatchlist;
     this._countWatched = countWatched;
     this._countFavorites = countFavorites;
   }
