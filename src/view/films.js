@@ -1,10 +1,9 @@
+import Abstract from './abstract.js';
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
-import {createShowMoreButtonTemplate} from './load-more-film/create-show-more-button.js';
 import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils.js';
 import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';
-import {statistics} from './statistic/count-statistics.js';
 
 /**
  *
@@ -20,6 +19,14 @@ const setCurrentFilm = (filmId) => {
 };
 
 /**
+ *
+ * @returns Создается кнопка загрузить ещё
+ */
+const createShowMoreButtonTemplate = () => (
+  '<button class="films-list__show-more">Show more</button>'
+);
+
+/**
  * Обработчик нажатий по карточкам фильма, открывает желаемый фильм в pop-up
  */
 const filmCardHandler = (evt) => {
@@ -33,10 +40,13 @@ const filmCardHandler = (evt) => {
     const currentFilm = setCurrentFilm(currentFilmId);
     const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
+    // Ставим обработчик закрытия pop-up
+    filmDetails.setCardHandler();
     body.classList.add('hide-overflow');
   }
 };
 
+// Временно
 const setTitleFilmList = () => {
   // временно такое решение
   const activefilters = document.querySelector('.main-navigation__item--active');
@@ -65,13 +75,13 @@ const createFilmListTemplate = (filmsCount, buttonLoadMore) => (
   </section>`
 );
 
-class FilmList {
+class FilmList extends Abstract {
   /**
    *
    * @param {array} filmData массив с фильмами
    */
   constructor(filmData) {
-    this._element = null;
+    super();
     this._films = filmData;
     this._loadMoreButton = null;
     this._filmContainer = null;
@@ -109,10 +119,6 @@ class FilmList {
     this.getMoreFilm();
     this.setCardHandler();
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 export default FilmList;

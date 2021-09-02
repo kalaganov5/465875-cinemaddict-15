@@ -1,6 +1,7 @@
 import {body} from '../main.js';
-import {getDeclension, createElement, removeElement} from './utils.js';
+import {getDeclension, removeElement} from './utils.js';
 import {renderComments} from './render-comments.js';
+import Abstract from './abstract.js';
 
 /**
  *
@@ -144,12 +145,11 @@ const createFilmTemplate = (filmDetails, comments) => {
   </section>`;
 };
 
-class FilmDetails {
+class FilmDetails extends Abstract {
   constructor(filmDetails, comments) {
-    this._element = null;
+    super();
     this._filmDetails = filmDetails;
     this._comments = comments;
-    this._popUp = null;
   }
 
   getTemplate() {
@@ -158,7 +158,7 @@ class FilmDetails {
 
   setCardHandler() {
     /**
-     * Закрывает и удалеяет popup из разметки
+     * Закрывает и удаляет popup из разметки
      */
     const closePopUp = () => {
       removeElement(this._element);
@@ -181,18 +181,6 @@ class FilmDetails {
       }
     }
     document.addEventListener('keydown', escapeDownHandler);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    this.setCardHandler();
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

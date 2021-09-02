@@ -8,7 +8,7 @@ import {generateFilms} from './mock/generate-films.js';
 import {renderDOMStrings, RenderPosition} from './view/utils.js';
 import {countedStatistics, statistics} from './view/statistic/count-statistics.js';
 
-const FILMS_COUNT = 1000;
+const FILMS_COUNT = 16;
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statisticsElement = document.querySelector('.footer__statistics');
@@ -46,7 +46,6 @@ renderDOMStrings(main, statistic.getElement(), RenderPosition.BEFOREEND);
 // Рендер фильмов
 const film = new FilmListView(films);
 renderDOMStrings(main, film.getElement(), RenderPosition.BEFOREEND);
-// film.getMoreFilm();
 // film.setCardHandler();
 
 // Футер статистика
