@@ -1,4 +1,5 @@
-import {cropText, getDeclension, removeElement} from './utils.js';
+import {cropText, getDeclension} from './utils.js';
+import {removeElement} from './utils/render.js';
 
 let howManyCallCreateFilmCardsTemplate = 0;
 const FILM_STEP = 5;

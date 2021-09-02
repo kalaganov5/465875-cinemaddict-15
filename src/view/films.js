@@ -1,6 +1,6 @@
 import Abstract from './abstract.js';
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
-import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils.js';
+import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';

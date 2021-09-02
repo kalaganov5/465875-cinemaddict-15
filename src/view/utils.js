@@ -1,39 +1,4 @@
 /**
- * Функция занимается отрисовкой элемента
- * @param {*} container - контейнер в который вставляем элемент
- * @param {*} layout - готовая разметка
- * @param {*} place - позиция добавляемого элемента относительно container (контейнера), может быть: 'beforebegin', 'afterbegin', 'beforeend', 'afterend'
- */
-const renderElement = (container, layout, place = 'beforeend') => {
-  container.insertAdjacentHTML(place, layout);
-};
-
-/**
- * Функция для более удобной выбора местоположения вставки
- */
-const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-/**
- * Функция вставит элементы в разметку
- * @param {*} container контейнер для вставки dom элементов
- * @param {string} DOMStrings - строка с готовой разметкой html
- * @param {string} position - расположение из функции RenderPosition
- */
-const renderDOMStrings = (container, DOMStrings, position = RenderPosition.BEFOREEND) => {
-  switch(position) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(DOMStrings);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(DOMStrings);
-      break;
-  }
-};
-
-/**
  *
  * @param {*} text
  * @returns
@@ -57,14 +22,6 @@ const getDeclension = (number, textArray) => {
     (number % 100 > 4 && number % 100 < 20) ?
       2 : cases[(number % 10 < 5) ?
         number % 10 : 5]];
-};
-
-/**
- * Удалит переданный элемент из разметки
- * @param {object} element
- */
-const removeElement = (element) => {
-  element.remove();
 };
 
 /**
@@ -126,20 +83,4 @@ const findMaxInObjectElement = (object) => {
   return topValue;
 };
 
-/**
- *
- * @param {string} template html в виде строки, строка должна иметь общую обертку
- * @returns строку превращаем в DOM-элемент
- */
-const createElement = (template) => {
-  // console.log(template)
-  let wrapper = document.createElement('div');
-  wrapper.innerHTML = template.trimLeft();
-  if (wrapper.querySelector('.temp-container')) {
-    wrapper = wrapper.querySelector('.temp-container').children;
-    return wrapper;
-  }
-  return wrapper.firstChild;
-};
-
-export {renderDOMStrings, createElement, RenderPosition, renderElement, cropText, getDeclension, removeElement, spreadHoursMinutesToMinutes, convertTime, countRepeatedItemInArray, findMaxInObjectElement};
+export {cropText, getDeclension, spreadHoursMinutesToMinutes, convertTime, countRepeatedItemInArray, findMaxInObjectElement};

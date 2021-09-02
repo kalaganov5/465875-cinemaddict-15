@@ -1,5 +1,6 @@
 import {body} from '../main.js';
-import {getDeclension, removeElement} from './utils.js';
+import {getDeclension} from './utils.js';
+import {removeElement} from './utils/render.js';
 import {renderComments} from './render-comments.js';
 import Abstract from './abstract.js';
 
