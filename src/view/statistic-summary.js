@@ -1,28 +1,16 @@
-import {createElement} from './utils.js';
+import Abstract from './abstract.js';
 
-class FilmSummaryStatistic {
+class FilmSummaryStatistic extends Abstract {
   /**
    * @films - массив с фильмами
    */
   constructor (films) {
-    this._element = null;
+    super();
     this._films = films;
   }
 
   getTemplate() {
     return `<p>${this._films.length} movies inside</p>`;
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,6 +1,8 @@
 import {body} from '../main.js';
-import {getDeclension, createElement, removeElement} from './utils.js';
+import {getDeclension} from './utils.js';
+import {removeElement} from './utils/render.js';
 import {renderComments} from './render-comments.js';
+import Abstract from './abstract.js';
 
 /**
  *
@@ -144,12 +146,11 @@ const createFilmTemplate = (filmDetails, comments) => {
   </section>`;
 };
 
-class FilmDetails {
+class FilmDetails extends Abstract {
   constructor(filmDetails, comments) {
-    this._element = null;
+    super();
     this._filmDetails = filmDetails;
     this._comments = comments;
-    this._popUp = null;
   }
 
   getTemplate() {
@@ -157,25 +158,30 @@ class FilmDetails {
   }
 
   setCardHandler() {
+    /**
+     * Закрывает и удаляет popup из разметки
+     */
+    const closePopUp = () => {
+      removeElement(this._element);
+      body.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', escapeDownHandler);
+    };
+    // handler по крестику
     this._element.addEventListener('click', (evt) => {
       evt.preventDefault();
       if(evt.target.classList.contains('film-details__close-btn')) {
-        removeElement(this._element);
-        body.classList.remove('hide-overflow');
+        closePopUp();
       }
     });
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
+    // handler по клавише Escape
+    // используем function declaration намеренно
+    // чтобы избежать ошибок linter
+    function escapeDownHandler(evt) {
+      if(evt.key === 'Escape') {
+        closePopUp();
+      }
     }
-    this.setCardHandler();
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    document.addEventListener('keydown', escapeDownHandler);
   }
 }
 

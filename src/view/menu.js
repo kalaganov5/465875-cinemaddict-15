@@ -1,4 +1,4 @@
-import {createElement} from './utils.js';
+import Abstract from './abstract.js';
 /**
  *
  * @returns Создает шаблон разметки меню
@@ -15,27 +15,16 @@ const createMenuTemplate = (countWatchlist, countWatched, countFavorites) => (
   </nav>`
 );
 
-class SiteMenu {
-  constructor(coutWatchlist, countWatched, countFavorites) {
-    this._element = null;
-    this._countWatchlist = coutWatchlist;
+class SiteMenu extends Abstract{
+  constructor(countWatchlist, countWatched, countFavorites) {
+    super();
+    this._countWatchlist = countWatchlist;
     this._countWatched = countWatched;
     this._countFavorites = countFavorites;
   }
 
   getTemplate() {
     return createMenuTemplate(this._countWatchlist, this._countWatched, this._countFavorites);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

@@ -1,6 +1,6 @@
+import Abstract from './abstract.js';
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
-import {createShowMoreButtonTemplate} from './load-more-film/create-show-more-button.js';
-import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils.js';
+import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';
@@ -19,6 +19,14 @@ const setCurrentFilm = (filmId) => {
 };
 
 /**
+ *
+ * @returns Создается кнопка загрузить ещё
+ */
+const createShowMoreButtonTemplate = () => (
+  '<button class="films-list__show-more">Show more</button>'
+);
+
+/**
  * Обработчик нажатий по карточкам фильма, открывает желаемый фильм в pop-up
  */
 const filmCardHandler = (evt) => {
@@ -32,7 +40,21 @@ const filmCardHandler = (evt) => {
     const currentFilm = setCurrentFilm(currentFilmId);
     const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
+    // Ставим обработчик закрытия pop-up
+    filmDetails.setCardHandler();
     body.classList.add('hide-overflow');
+  }
+};
+
+// Временно
+const setTitleFilmList = () => {
+  // временно такое решение
+  const activefilters = document.querySelector('.main-navigation__item--active');
+  switch(activefilters.textContent) {
+    case 'All movies': return 'There are no movies in our database';
+    case 'Watchlist': return 'There are no movies to watch now';
+    case 'History': return 'There are no watched movies now';
+    case 'Favorites': return 'There are no favorite movies now';
   }
 };
 
@@ -53,13 +75,13 @@ const createFilmListTemplate = (filmsCount, buttonLoadMore) => (
   </section>`
 );
 
-class FilmList {
+class FilmList extends Abstract {
   /**
    *
    * @param {array} filmData массив с фильмами
    */
   constructor(filmData) {
-    this._element = null;
+    super();
     this._films = filmData;
     this._loadMoreButton = null;
     this._filmContainer = null;
@@ -87,7 +109,7 @@ class FilmList {
   }
 
   setCardHandler() {
-    this._filmContainer.addEventListener('click', filmCardHandler, true);
+    this._filmContainer.addEventListener('click', filmCardHandler);
   }
 
   getElement() {
@@ -97,10 +119,6 @@ class FilmList {
     this.getMoreFilm();
     this.setCardHandler();
     return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 export default FilmList;

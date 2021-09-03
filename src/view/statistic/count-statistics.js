@@ -36,7 +36,6 @@ const countedStatistics = (films) => {
   const genresObj = countRepeatedItemInArray(genres);
   const genresTop = findMaxInObjectElement(genresObj);
 
-  // console.log(time);
   return statistics = {
     watched: countHistory,
     watchlist: countWatchlist,

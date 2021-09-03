@@ -1,5 +1,5 @@
+import Abstract from './abstract.js';
 import {setUserRank} from './user-rating/set-user-rank.js';
-import {createElement} from './utils.js';
 
 // нада продумать фильтрацию
 const createFilmStatisticTemplate = (countWatched, genre, durationHour, durationMinutes) => (
@@ -53,7 +53,7 @@ const createFilmStatisticTemplate = (countWatched, genre, durationHour, duration
   </section>`
 );
 
-class FilmStatistic {
+class FilmStatistic extends Abstract {
   /**
    *
    * @param {*} countWatched
@@ -62,7 +62,7 @@ class FilmStatistic {
    * @param {*} durationMinutes
    */
   constructor(countWatched, topGenre, durationHour, durationMinutes) {
-    this._element = null;
+    super();
     this._countWatched = countWatched;
     this._topGenre = topGenre;
     this._durationHour = durationHour;
@@ -75,17 +75,6 @@ class FilmStatistic {
       this._topGenre,
       this._durationHour,
       this._durationMinutes);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
