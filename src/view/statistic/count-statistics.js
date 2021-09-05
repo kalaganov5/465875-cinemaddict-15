@@ -1,7 +1,5 @@
 import {spreadHoursMinutesToMinutes, countRepeatedItemInArray, findMaxInObjectElement} from '../utils.js';
 
-let statistics = '';
-
 /**
  *
  * @returns Вернёт объект с готовой статистикой
@@ -36,7 +34,7 @@ const countedStatistics = (films) => {
   const genresObj = countRepeatedItemInArray(genres);
   const genresTop = findMaxInObjectElement(genresObj);
 
-  return statistics = {
+  return {
     watched: countHistory,
     watchlist: countWatchlist,
     favorites: countFavorites,
@@ -49,4 +47,4 @@ const countedStatistics = (films) => {
   };
 };
 
-export {countedStatistics, statistics};
+export {countedStatistics};

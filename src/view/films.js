@@ -1,6 +1,6 @@
 import Abstract from './abstract.js';
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
-import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
+import {renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
 import {comments} from '../mock/generate-comments.js';
 import {films, body} from '../main.js';
@@ -93,7 +93,6 @@ class FilmList extends Abstract {
     const loadMore = this._films.length > FILM_STEP ?
       createShowMoreButtonTemplate(): '';
     this._element = createFilmListTemplate(cards, loadMore);
-
     return this._element;
   }
 
@@ -110,15 +109,6 @@ class FilmList extends Abstract {
 
   setCardHandler() {
     this._filmContainer.addEventListener('click', filmCardHandler);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    this.getMoreFilm();
-    this.setCardHandler();
-    return this._element;
   }
 }
 export default FilmList;
