@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomUniqueNumber, getRandomInteger, getRandomElement} from '../mock/utils.js';
+import {getRandomUniqueNumber, getRandomInteger, getRandomElement} from './utils.js';
 
 const COMMENTS_COUNT = 100;
 
@@ -46,7 +46,6 @@ const generateCommentDatePublication = () => (
   dayjs()
     .subtract(getRandomInteger(1, 178), 'day')
     .subtract(getRandomInteger(1, 12), 'hour')
-    .format('YYYY/MM/DD HH:mm')
 );
 
 const commentsId = [];
@@ -67,7 +66,7 @@ const commentObj = () => {
     comment: getRandomElement(COMMENTS),
     author: getRandomElement(AUTHOR_COMMENT),
     // Дата комментария отображается в формате год/месяц/день часы:минуты (например «2019/12/31 23:59»).
-    datePublication: generateCommentDatePublication(),
+    datePublication: generateCommentDatePublication().format('YYYY/MM/DD HH:mm'),
   };
 };
 

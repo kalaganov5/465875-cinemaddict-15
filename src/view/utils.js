@@ -1,14 +1,4 @@
 /**
- * Функция занимается отрисовкой элемента
- * @param {*} container - контейнер в который вставляем элемент
- * @param {*} layout - готовая разметка
- * @param {*} place - позиция добавляемого элемента относительно container (контейнера), может быть: 'beforebegin', 'afterbegin', 'beforeend', 'afterend'
- */
-const renderElement = (container, layout, place = 'beforeend') => {
-  container.insertAdjacentHTML(place, layout);
-};
-
-/**
  *
  * @param {*} text
  * @returns
@@ -32,14 +22,6 @@ const getDeclension = (number, textArray) => {
     (number % 100 > 4 && number % 100 < 20) ?
       2 : cases[(number % 10 < 5) ?
         number % 10 : 5]];
-};
-
-/**
- * Удалит переданный элемент из разметки
- * @param {object} element
- */
-const removeElement = (element) => {
-  element.remove();
 };
 
 /**
@@ -70,19 +52,14 @@ const spreadHoursMinutesToMinutes = (duration) => {
 const convertTime = (durationMinutes) => {
   const hours = Math.trunc(durationMinutes / 60);
   const minutes = durationMinutes % 60;
-
-  // return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m` : ''}`;
   return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m` : ''}`;
-  // return {
-  //   hours: hours > 0 ? hours : 0,
-  //   minutes: minutes > 0 ? minutes : 0,
-  // };
+
 };
 
 /**
  *
  * @param {array} array массив в котором считаем количество повторений
- * @returns объект в где ключ это значение из массива и значение объекта это колличество повторений
+ * @returns объект в где ключ это значение из массива и значение объекта это количество повторений
  */
 const countRepeatedItemInArray = (array) => (
   array.reduce((accumulator, element) => {
@@ -106,4 +83,4 @@ const findMaxInObjectElement = (object) => {
   return topValue;
 };
 
-export {renderElement, cropText, getDeclension, removeElement, spreadHoursMinutesToMinutes, convertTime, countRepeatedItemInArray, findMaxInObjectElement};
+export {cropText, getDeclension, spreadHoursMinutesToMinutes, convertTime, countRepeatedItemInArray, findMaxInObjectElement};

@@ -1,4 +1,3 @@
-import {films} from '../../main.js';
 import {spreadHoursMinutesToMinutes, countRepeatedItemInArray, findMaxInObjectElement} from '../utils.js';
 
 let statistics = '';
@@ -7,7 +6,7 @@ let statistics = '';
  *
  * @returns Вернёт объект с готовой статистикой
  */
-const countedStatistics = () => {
+const countedStatistics = (films) => {
 
   let countWatchlist = 0;
   let countHistory = 0;
@@ -24,6 +23,7 @@ const countedStatistics = () => {
     } else if (isFavorite) {
       countFavorites++;
     }
+
     // Собираем жанры в массив
     genre.forEach((item)=> {
       genres.push(item);
@@ -36,7 +36,6 @@ const countedStatistics = () => {
   const genresObj = countRepeatedItemInArray(genres);
   const genresTop = findMaxInObjectElement(genresObj);
 
-  // console.log(time);
   return statistics = {
     watched: countHistory,
     watchlist: countWatchlist,

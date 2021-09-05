@@ -1,6 +1,8 @@
 import {body} from '../main.js';
 import {getDeclension} from './utils.js';
+import {removeElement} from './utils/render.js';
 import {renderComments} from './render-comments.js';
+import Abstract from './abstract.js';
 
 /**
  *
@@ -9,13 +11,13 @@ import {renderComments} from './render-comments.js';
  */
 const generateGenre = (genres) => {
   let genreElements = '';
-  for (let i = 0; i < genres.length; i++) {
-    genreElements+= `<span class="film-details__genre">${genres[i]}</span>`;
-  }
+  genres.forEach((element)=> {
+    genreElements += `<span class="film-details__genre">${element}</span>`;
+  });
   return genreElements;
 };
 
-const renderFilmDetails = (filmDetails, comments) => {
+const createFilmTemplate = (filmDetails, comments) => {
   const {
     title,
     originalTitle,
@@ -35,10 +37,7 @@ const renderFilmDetails = (filmDetails, comments) => {
     isWatched,
     isFavorite,
   } = filmDetails;
-
-  body.classList.add('hide-overflow');
-  return `
-  <section class="film-details">
+  return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
         <div class="film-details__close">
@@ -144,8 +143,46 @@ const renderFilmDetails = (filmDetails, comments) => {
         </section>
       </div>
     </form>
-  </section>
-  `;
+  </section>`;
 };
 
-export {renderFilmDetails};
+class FilmDetails extends Abstract {
+  constructor(filmDetails, comments) {
+    super();
+    this._filmDetails = filmDetails;
+    this._comments = comments;
+  }
+
+  getTemplate() {
+    return createFilmTemplate(this._filmDetails, this._comments);
+  }
+
+  setCardHandler() {
+    /**
+     * Закрывает и удаляет popup из разметки
+     */
+    const closePopUp = () => {
+      removeElement(this._element);
+      body.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', escapeDownHandler);
+    };
+    // handler по крестику
+    this._element.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      if(evt.target.classList.contains('film-details__close-btn')) {
+        closePopUp();
+      }
+    });
+    // handler по клавише Escape
+    // используем function declaration намеренно
+    // чтобы избежать ошибок linter
+    function escapeDownHandler(evt) {
+      if(evt.key === 'Escape') {
+        closePopUp();
+      }
+    }
+    document.addEventListener('keydown', escapeDownHandler);
+  }
+}
+
+export default FilmDetails;
