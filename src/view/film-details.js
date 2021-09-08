@@ -159,11 +159,12 @@ class FilmDetails extends Abstract {
   }
 
   setCardHandler() {
+    const popUpsOpen = body.querySelectorAll('.film-details');
     /**
      * Закрывает и удаляет popup из разметки
      */
-    const closePopUp = () => {
-      removeElement(this._element);
+    const closePopUp = (element = this._element) => {
+      removeElement(element);
       body.classList.remove('hide-overflow');
       document.removeEventListener('keydown', escapeDownHandler);
     };
@@ -181,10 +182,15 @@ class FilmDetails extends Abstract {
     // чтобы избежать ошибок linter
     function escapeDownHandler(evt) {
       if(evt.key === 'Escape') {
-        closePopUp();
+        // Не использую переменную popUpsOpen т.к. он дает ссылку на неверный элемент
+        closePopUp(document.querySelector('.film-details'));
       }
     }
     document.addEventListener('keydown', escapeDownHandler);
+    // Закрыть pop-up если он не первый
+    if (popUpsOpen.length > 1) {
+      closePopUp(popUpsOpen[0]);
+    }
   }
 }
 
