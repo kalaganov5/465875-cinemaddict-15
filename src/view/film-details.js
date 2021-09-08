@@ -3,6 +3,7 @@ import {getDeclension} from './utils.js';
 import {removeElement} from './utils/render.js';
 import {renderComments} from './render-comments.js';
 import Abstract from './abstract.js';
+import {filmHandler} from './film-handler.js';
 
 /**
  *
@@ -171,6 +172,8 @@ class FilmDetails extends Abstract {
       evt.preventDefault();
       if(evt.target.classList.contains('film-details__close-btn')) {
         closePopUp();
+      } else if(evt.target.classList.contains('film-details__control-button')) {
+        filmHandler(evt.target, true);
       }
     });
     // handler по клавише Escape

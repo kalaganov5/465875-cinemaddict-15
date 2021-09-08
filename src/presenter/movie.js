@@ -6,16 +6,25 @@ import FilmListView from '../view/films.js';
 import FilmSummaryStatisticView from '../view/statistic-summary.js';
 import {renderDOMStrings, RenderPosition} from '../view/utils/render.js';
 import {countedStatistics} from '../view/statistic/count-statistics.js';
+import {cardTemplate} from '../view/create-film-card.js';
+import {createElement} from '../view/utils/render.js';
 
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statisticsFooter = document.querySelector('.footer__statistics');
 
 export default class Movie {
-  constructor(films) {
+  /**
+   *
+   * @param {array} films массив с фильмами
+   * @param {array} comments массив комментариев
+   */
+  constructor(films, comments) {
     this._films = films;
     this._statistic = countedStatistics(this._films);
+    this._comments = comments;
     this._page = null;
+    this._film = null;
   }
 
   init() {
@@ -51,7 +60,7 @@ export default class Movie {
   }
 
   _renderFilms() {
-    const film = new FilmListView(this._films);
+    const film = new FilmListView(this._films, this._comments);
     renderDOMStrings(main, film.getElement(), RenderPosition.BEFOREEND);
     // set handler and load more button
     film.getMoreFilm();
@@ -73,6 +82,73 @@ export default class Movie {
       this._statistic.totalDuration.minutes,
     );
     renderDOMStrings(main, statistic.getElement(), RenderPosition.BEFOREEND);
+  }
+
+  get updateFilm() {
+    return this._film;
+  }
+
+  set updateFilm(filmProcessed) {
+    this._film = filmProcessed;
+    // Найти фильм в массиве
+    for(let i = 0; i < this._films.length; i++) {
+      // Вариант: пройтись по ключам объекта и найти что заменяет
+      if(this._films[i]._id === this._film._id) {
+        this._films.splice(i, 1, this._film);
+        // запуск процесса обновления фильма
+        this.updateHtml();
+        break;
+      }
+    }
+  }
+
+  updateHtml() {
+    const currentFilmForUpdate = document.querySelector(`[data-film-id="${this._film._id}"]`);
+    const {
+      _id,
+      title,
+      rating,
+      releaseDate,
+      duration,
+      genre,
+      poster,
+      description,
+      commentIds,
+      isWatchlist,
+      isWatched,
+      isFavorite,
+    } =  this._film;
+    const newFilmElement = cardTemplate(_id,
+      title,
+      rating,
+      releaseDate,
+      duration,
+      genre,
+      poster,
+      description,
+      commentIds,
+      isWatchlist,
+      isWatched,
+      isFavorite);
+    const currentFilmElementToHTML = createElement(newFilmElement);
+    currentFilmForUpdate.innerHTML = currentFilmElementToHTML.innerHTML;
+    // Обновляем меню
+    this._updateMenu();
+  }
+
+  _updateMenu() {
+    // Обновляем статистику
+    this._statistic = countedStatistics(this._films);
+    const menuElement = document.querySelector('.main-navigation');
+    // watchlist
+    const watchlistElement = menuElement.querySelector('.main-navigation__item-count--watchlist');
+    watchlistElement.textContent = this._statistic.watchlist;
+    // history
+    const historyElement = menuElement.querySelector('.main-navigation__item-count--history');
+    historyElement.textContent = this._statistic.watched;
+    // history
+    const favoritesElement = menuElement.querySelector('.main-navigation__item-count--favorites');
+    favoritesElement.textContent = this._statistic.favorites;
   }
 
   _renderStatisticShort() {

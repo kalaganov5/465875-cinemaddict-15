@@ -5,7 +5,6 @@ import {spreadHoursMinutesToMinutes, countRepeatedItemInArray, findMaxInObjectEl
  * @returns Вернёт объект с готовой статистикой
  */
 const countedStatistics = (films) => {
-
   let countWatchlist = 0;
   let countHistory = 0;
   let countFavorites = 0;
@@ -14,14 +13,9 @@ const countedStatistics = (films) => {
 
   films.forEach((film) => {
     const {isWatchlist, isWatched, isFavorite, duration, genre} = film;
-    if (isWatchlist) {
-      countWatchlist++;
-    } else if (isWatched) {
-      countHistory++;
-    } else if (isFavorite) {
-      countFavorites++;
-    }
-
+    isWatched ? countHistory++ : false;
+    isWatchlist ? countWatchlist++ : false;
+    isFavorite ? countFavorites++ : false;
     // Собираем жанры в массив
     genre.forEach((item)=> {
       genres.push(item);

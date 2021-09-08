@@ -2,8 +2,16 @@ import Abstract from './abstract.js';
 import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
 import {renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
-import {comments} from '../mock/generate-comments.js';
-import {films, body} from '../main.js';
+import {body} from '../main.js';
+import {filmHandler} from './film-handler.js';
+
+
+// Чтобы не прокидывать фильмы несколько раз используем замыкание
+let films;
+// Чтобы не прокидывать комментарии несколько раз используем замыкание
+let comments;
+// Текущий обрабатываемый фильм
+let currentFilm;
 
 /**
  *
@@ -31,18 +39,23 @@ const createShowMoreButtonTemplate = () => (
  */
 const filmCardHandler = (evt) => {
   evt.preventDefault();
+  // Находим и ставим текущий id фильма
+  const filmId = evt.target.parentNode.getAttribute('data-film-id') !== null ?
+    evt.target.parentNode.getAttribute('data-film-id') : evt.target.parentNode.parentNode.getAttribute('data-film-id');
+  // Поп-ап с описанием фильма
+  currentFilm = setCurrentFilm(filmId);
+
   if (evt.target.classList.contains('film-card__poster') ||
     evt.target.classList.contains('film-card__title') ||
     evt.target.classList.contains('film-card__comments')) {
-    // Находим и ставим текущий id фильма
-    const currentFilmId = evt.target.parentNode.getAttribute('data-film-id');
-    // Поп-ап с описанием фильма
-    const currentFilm = setCurrentFilm(currentFilmId);
     const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
     // Ставим обработчик закрытия pop-up
     filmDetails.setCardHandler();
     body.classList.add('hide-overflow');
+  } else if (evt.target.classList.contains('film-card__controls-item')) {
+    // Пробрасываем элемент из кнопок
+    filmHandler(evt.target, false);
   }
 };
 
@@ -80,12 +93,17 @@ class FilmList extends Abstract {
    *
    * @param {array} filmData массив с фильмами
    */
-  constructor(filmData) {
+  constructor(filmData, commentData) {
     super();
     this._films = filmData;
+    // В переменную films прокидываем реальные данные
+    films = this._films;
     this._loadMoreButton = null;
     this._filmContainer = null;
     this._cardElement = null;
+    this._comments = commentData;
+    // В переменную comments прокидываем реальные данные
+    comments = this._comments;
   }
 
   getTemplate() {
@@ -112,3 +130,4 @@ class FilmList extends Abstract {
   }
 }
 export default FilmList;
+export {currentFilm};
