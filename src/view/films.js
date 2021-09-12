@@ -1,5 +1,6 @@
 import Abstract from './abstract.js';
-import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
+import {FILM_STEP} from './create-film-card.js';
+import CreateFilmCardsView from './create-film-card.js';
 import {renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
 import {body} from '../main.js';
@@ -81,7 +82,7 @@ const createFilmListTemplate = (filmsCount, buttonLoadMore) => (
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
       <div class="films-list__container">
-        ${filmsCount}
+        ${filmsCount.length > 0 ? filmsCount : 'There are no movies in our database'}
       </div>
       ${buttonLoadMore}
     </section>
@@ -97,7 +98,7 @@ class FilmList extends Abstract {
     super();
     this._films = filmData;
     // В переменную films прокидываем реальные данные
-    films = this._films;
+    films = filmData;
     this._loadMoreButton = null;
     this._filmContainer = null;
     this._cardElement = null;
@@ -107,20 +108,22 @@ class FilmList extends Abstract {
   }
 
   getTemplate() {
-    const cards = createFilmCardsTemplate(this._films);
+    const cards = new CreateFilmCardsView(this._films);
     const loadMore = this._films.length > FILM_STEP ?
       createShowMoreButtonTemplate(): '';
-    this._element = createFilmListTemplate(cards, loadMore);
+    this._element = createFilmListTemplate(cards.createCards(), loadMore);
     return this._element;
   }
 
-  getMoreFilm() {
+  getMoreFilm(currentFilms = this._films) {
+    let count = 1;
     this._filmContainer = this._element.querySelector('.films-list__container');
-    if(this._films.length > FILM_STEP) {
+    if(currentFilms.length > FILM_STEP) {
       this._loadMoreButton = this._element.querySelector('.films-list__show-more');
       this._loadMoreButton.addEventListener ('click', (evt) => {
         evt.preventDefault();
-        renderElement(this._filmContainer, createFilmCardsTemplate(this._films, this._loadMoreButton), RenderPosition.BEFOREEND);
+        const moreElements = new CreateFilmCardsView(currentFilms, this._loadMoreButton).createCards(++count);
+        renderElement(this._filmContainer, moreElements, RenderPosition.BEFOREEND);
       });
     }
   }
