@@ -128,11 +128,15 @@ const generateFilm = () => ({
   isFavorite: Boolean(getRandomInteger(0, 1) === 1),
   isWatched: Boolean(getRandomInteger(0, 1) === 1),
   // Нужна функция которая если фильм просмотрен то должна быть дата
-  get wathedDate() {
+  get watchedDate() {
+    // this._generateToday срабатывает если фильм ставиться пользователем
+    if(this._generateToday) {
+      return dayjs();
+    }
     return this.isWatched ? generateReleseDate(): null;
   },
-  set wathedDate(value) {
-    this.value;
+  set watchedDate(value) {
+    this._generateToday = value;
   },
   isWatchlist: Boolean(getRandomInteger(0, 1) === 1),
 });
