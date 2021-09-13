@@ -9,7 +9,7 @@ const getRandomInteger = (min, max) => {
     return Error('Неверное значение');
   }
   // большее и меньшее вычислим с помощью Math.min и Math.max, чтобы пользователю не запоминать очередность
-  // с помощью Math.abs передем отризацтельное число в положительное
+  // с помощью Math.abs переведём отрицательное число в положительное
   min = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   max = Math.floor((Math.max(Math.abs(min), Math.abs(max))));
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -18,7 +18,7 @@ const getRandomInteger = (min, max) => {
 /**
  * Добавляет в массив уникальные значения, если массив переполнен, будет ошибка
  * @param {Array} array - массив в который будет добавлять уникальные значения/id
- * @param {Number} maxNumber - максимальное колличество id, по умолчанию 9 999
+ * @param {Number} maxNumber - максимальное количество id, по умолчанию 9 999
  * Дополнительно вернёт текущее значение
  */
 const getRandomUniqueNumber = (array, maxNumber = 9999) => {
