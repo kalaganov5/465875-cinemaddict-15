@@ -1,7 +1,6 @@
 import {cropText, getDeclension} from './utils.js';
 import {removeElement} from './utils/render.js';
 
-let howManyCallCreateFilmCardsTemplate = 0;
 const FILM_STEP = 5;
 
 const cardTemplate = (_id,
@@ -33,57 +32,65 @@ const cardTemplate = (_id,
       </div>
     </article>`);
 
-/**
- * @filmArray - массив с фильмами
- * @returns Генерирует необходимое количество карточек фильмов
+class CreateFilmCards {
+  /**
+ * @films - массив с фильмами
+ * Генерирует необходимое количество карточек фильмов
  */
-const createFilmCardsTemplate = (filmArray, showMoreButton = null) => {
-  howManyCallCreateFilmCardsTemplate++;
-  const startIndex = (FILM_STEP * howManyCallCreateFilmCardsTemplate) - FILM_STEP;
-  const endIndex = startIndex + FILM_STEP;
-  let filmCards = '';
-  for (let i = startIndex; i < endIndex; i++) {
-    // Если в массиве закончились данные
-    if (filmArray[i] === undefined) {
-      // Если кнопки уже не существует
-      showMoreButton !== null && showMoreButton !== undefined ? removeElement(showMoreButton): '';
-      break;
-    }
-    const {
-      _id,
-      title,
-      rating,
-      releaseDate,
-      duration,
-      genre,
-      poster,
-      description,
-      commentIds,
-      isWatchlist,
-      isWatched,
-      isFavorite,
-    } =  filmArray[i];
-
-
-    // Зашиваю id фильма для того чтобы в будущем попробовать реализовать
-    // генерацию и рендер pop-up фильма по отслеживанию нажатия ID
-    filmCards += cardTemplate(_id,
-      title,
-      rating,
-      releaseDate,
-      duration,
-      genre,
-      poster,
-      description,
-      commentIds,
-      isWatchlist,
-      isWatched,
-      isFavorite);
-    if (filmArray.length - 1 === i && showMoreButton !== null && showMoreButton !== undefined) {
-      removeElement(showMoreButton);
-    }
+  constructor(films, showMoreButton = null) {
+    this._films = films;
+    this._showMoreButton = showMoreButton;
+    this._filmCards = '';
+    this._numberClickLoadMore = 1;
   }
-  return filmCards;
-};
 
-export {createFilmCardsTemplate, cardTemplate, FILM_STEP};
+  createCards(number) {
+    number ? this._numberClickLoadMore = number : false;
+    const startIndex = (FILM_STEP * this._numberClickLoadMore) - FILM_STEP;
+    const endIndex = startIndex + FILM_STEP;
+    for (let i = startIndex; i < endIndex; i++) {
+      // console.log(this._films[i], i);
+      // Если в массиве закончились данные
+      if (this._films[i] === undefined) {
+        // Если кнопки уже не существует
+        this._showMoreButton !== null && this._showMoreButton !== undefined ? removeElement(this._showMoreButton): '';
+        break;
+      }
+      const {
+        _id,
+        title,
+        rating,
+        releaseDate,
+        duration,
+        genre,
+        poster,
+        description,
+        commentIds,
+        isWatchlist,
+        isWatched,
+        isFavorite,
+      } =  this._films[i];
+      // Зашиваю id фильма для того чтобы в будущем попробовать реализовать
+      // генерацию и рендер pop-up фильма по отслеживанию нажатия ID
+      this._filmCards += cardTemplate(_id,
+        title,
+        rating,
+        releaseDate,
+        duration,
+        genre,
+        poster,
+        description,
+        commentIds,
+        isWatchlist,
+        isWatched,
+        isFavorite);
+      if (this._films.length - 1 === i && this._showMoreButton !== null && this._showMoreButton !== undefined) {
+        removeElement(this._showMoreButton);
+      }
+    }
+    return this._filmCards;
+  }
+}
+
+export {cardTemplate, FILM_STEP};
+export default CreateFilmCards;

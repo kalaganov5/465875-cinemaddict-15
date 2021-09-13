@@ -3,7 +3,7 @@ import MoviePresenter from './presenter/movie.js';
 // Mock
 import {generateFilms} from './mock/generate-films.js';
 import {comments} from './mock/generate-comments.js';
-const FILMS_COUNT = 2;
+const FILMS_COUNT = 23;
 const films = generateFilms(FILMS_COUNT);
 // Mock
 

@@ -7,11 +7,15 @@ import FilmSummaryStatisticView from '../view/statistic-summary.js';
 import {renderDOMStrings, RenderPosition} from '../view/utils/render.js';
 import {countedStatistics} from '../view/statistic/count-statistics.js';
 import {cardTemplate} from '../view/create-film-card.js';
-import {createElement} from '../view/utils/render.js';
+import {createElement, removeElement} from '../view/utils/render.js';
 
 const header = document.querySelector('.header');
 const main = document.querySelector('.main');
 const statisticsFooter = document.querySelector('.footer__statistics');
+
+let setContext = function() {
+  return this;
+};
 
 export default class Movie {
   /**
@@ -25,6 +29,9 @@ export default class Movie {
     this._comments = comments;
     this._page = null;
     this._film = null;
+    this._filter = new FilterMenuView();
+    setContext = setContext.bind(this);
+    this._filmView = new FilmListView(this._films, this._comments);
   }
 
   init() {
@@ -55,16 +62,48 @@ export default class Movie {
 
   _renderSort() {
     // Render filters
-    const filter = new FilterMenuView();
-    renderDOMStrings(main, filter.getElement(), RenderPosition.BEFOREEND);
+    renderDOMStrings(main, this._filter.getElement(), RenderPosition.BEFOREEND);
+    this._filter._element.addEventListener('click', this._sortSetHandler);
   }
 
-  _renderFilms() {
-    const film = new FilmListView(this._films, this._comments);
-    renderDOMStrings(main, film.getElement(), RenderPosition.BEFOREEND);
+  _sortSetHandler(evt) {
+    if (evt.target.classList.contains('sort__button')) {
+      const sortActive = this.querySelector('.sort__button--active');
+      if (sortActive !== evt.target) {
+        sortActive.classList.remove('sort__button--active');
+        evt.target.classList.add('sort__button--active');
+        setContext().sortFilms = evt.target.getAttribute('data-sort');
+      }
+    }
+  }
+
+  get sortFilms() {
+    return this.sortValue;
+  }
+
+  set sortFilms(sortValue) {
+    if(sortValue === 'rating') {
+      const sortByRating = this._films.slice().sort((a, b) => b.rating - a.rating);
+      this._renderFilms(sortByRating, true);
+    } else if (sortValue === 'date') {
+      const sortByDate = this._films.slice().sort((a, b) => b.releaseDate - a.releaseDate);
+      this._renderFilms(sortByDate, true);
+    } else {
+      this._renderFilms(this._films, true);
+    }
+  }
+
+  _renderFilms(currentFilms, isOnlyFilmsUpdate) {
+    if (isOnlyFilmsUpdate) {
+      this._filmView.removeElement();
+      const filmHtml = document.querySelector('.films');
+      removeElement(filmHtml);
+      this._filmView._films = currentFilms;
+    }
+    renderDOMStrings(main, this._filmView.getElement(), RenderPosition.BEFOREEND);
     // set handler and load more button
-    film.getMoreFilm();
-    film.setCardHandler();
+    this._filmView.getMoreFilm(this._filmView._films);
+    this._filmView.setCardHandler();
   }
 
   showMoviePage() {
