@@ -1,9 +1,18 @@
 import Abstract from './abstract.js';
-import {createFilmCardsTemplate, FILM_STEP} from './create-film-card.js';
-import {createElement, renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
+import {FILM_STEP} from './create-film-card.js';
+import CreateFilmCardsView from './create-film-card.js';
+import {renderDOMStrings, RenderPosition, renderElement} from './utils/render.js';
 import FilmDetailsView from './film-details.js';
-import {comments} from '../mock/generate-comments.js';
-import {films, body} from '../main.js';
+import {body} from '../main.js';
+import {filmHandler} from './film-handler.js';
+
+
+// Чтобы не прокидывать фильмы несколько раз используем замыкание
+let films;
+// Чтобы не прокидывать комментарии несколько раз используем замыкание
+let comments;
+// Текущий обрабатываемый фильм
+let currentFilm;
 
 /**
  *
@@ -31,18 +40,23 @@ const createShowMoreButtonTemplate = () => (
  */
 const filmCardHandler = (evt) => {
   evt.preventDefault();
+  // Находим и ставим текущий id фильма
+  const filmId = evt.target.parentNode.getAttribute('data-film-id') !== null ?
+    evt.target.parentNode.getAttribute('data-film-id') : evt.target.parentNode.parentNode.getAttribute('data-film-id');
+  // Поп-ап с описанием фильма
+  currentFilm = setCurrentFilm(filmId);
+
   if (evt.target.classList.contains('film-card__poster') ||
     evt.target.classList.contains('film-card__title') ||
     evt.target.classList.contains('film-card__comments')) {
-    // Находим и ставим текущий id фильма
-    const currentFilmId = evt.target.parentNode.getAttribute('data-film-id');
-    // Поп-ап с описанием фильма
-    const currentFilm = setCurrentFilm(currentFilmId);
     const filmDetails = new FilmDetailsView(currentFilm, comments);
     renderDOMStrings(body, filmDetails.getElement(), RenderPosition.BEFOREEND);
     // Ставим обработчик закрытия pop-up
     filmDetails.setCardHandler();
     body.classList.add('hide-overflow');
+  } else if (evt.target.classList.contains('film-card__controls-item')) {
+    // Пробрасываем элемент из кнопок
+    filmHandler(evt.target, false);
   }
 };
 
@@ -68,7 +82,7 @@ const createFilmListTemplate = (filmsCount, buttonLoadMore) => (
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
       <div class="films-list__container">
-        ${filmsCount}
+        ${filmsCount.length > 0 ? filmsCount : 'There are no movies in our database'}
       </div>
       ${buttonLoadMore}
     </section>
@@ -80,30 +94,36 @@ class FilmList extends Abstract {
    *
    * @param {array} filmData массив с фильмами
    */
-  constructor(filmData) {
+  constructor(filmData, commentData) {
     super();
     this._films = filmData;
+    // В переменную films прокидываем реальные данные
+    films = filmData;
     this._loadMoreButton = null;
     this._filmContainer = null;
     this._cardElement = null;
+    this._comments = commentData;
+    // В переменную comments прокидываем реальные данные
+    comments = this._comments;
   }
 
   getTemplate() {
-    const cards = createFilmCardsTemplate(this._films);
+    const cards = new CreateFilmCardsView(this._films);
     const loadMore = this._films.length > FILM_STEP ?
       createShowMoreButtonTemplate(): '';
-    this._element = createFilmListTemplate(cards, loadMore);
-
+    this._element = createFilmListTemplate(cards.createCards(), loadMore);
     return this._element;
   }
 
-  getMoreFilm() {
+  getMoreFilm(currentFilms = this._films) {
+    let count = 1;
     this._filmContainer = this._element.querySelector('.films-list__container');
-    if(this._films.length > FILM_STEP) {
+    if(currentFilms.length > FILM_STEP) {
       this._loadMoreButton = this._element.querySelector('.films-list__show-more');
       this._loadMoreButton.addEventListener ('click', (evt) => {
         evt.preventDefault();
-        renderElement(this._filmContainer, createFilmCardsTemplate(this._films, this._loadMoreButton), RenderPosition.BEFOREEND);
+        const moreElements = new CreateFilmCardsView(currentFilms, this._loadMoreButton).createCards(++count);
+        renderElement(this._filmContainer, moreElements, RenderPosition.BEFOREEND);
       });
     }
   }
@@ -111,14 +131,6 @@ class FilmList extends Abstract {
   setCardHandler() {
     this._filmContainer.addEventListener('click', filmCardHandler);
   }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    this.getMoreFilm();
-    this.setCardHandler();
-    return this._element;
-  }
 }
 export default FilmList;
+export {currentFilm};
